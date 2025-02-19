@@ -153,3 +153,18 @@ def machine_code(instuctions, labels, lineNo):
             if i==-1:
                 return f"Error: Invalid register name at line {lineNo}"
         return R_type(inst, rd, rs1, rs2)
+        
+    elif inst in ("addi", "lw", "jalr"):
+        if inst == 'jalr':
+            if len(instruction_fields)!=4:
+                return f"Syntax Error at line {lineNo}"
+           
+            rd = RegToNum(instruction_fields[1])
+            rs1 = RegToNum(instruction_fields[2])
+            Imi = int(instruction_fields[3])
+            lis2=[rd,rs1]
+            for i in lis2:
+                if i==-1:
+                    return f"Error: Invalid register name at line {lineNo}"
+
+            return I_type(inst, rd, rs1, Imi)

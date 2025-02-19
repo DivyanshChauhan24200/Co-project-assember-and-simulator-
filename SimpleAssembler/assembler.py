@@ -1,6 +1,9 @@
 import re
 import sys
-registers = {"zero": 0,"x0":0,"ra": 1,
+registers = {
+    "zero": 0,
+    "x0":0,
+    "ra": 1,
     "sp": 2,
     "gp": 3,
     "tp": 4,

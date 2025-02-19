@@ -103,3 +103,11 @@ def J_type(inst, rd, imm):
     return (imm_20 +
             format(rd, '05b') +
             opcode[inst])
+def S_type(inst, rs2, rs1, imm):
+    b_imm = format(imm & 0xfff, '012b')
+    return (b_imm[0:7] +
+            format(rs2, '05b') +
+            format(rs1, '05b') +
+            "010"+
+            b_imm[7:12] +
+            opcode[inst])

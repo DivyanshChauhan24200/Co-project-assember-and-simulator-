@@ -285,3 +285,17 @@ def Compiler(input_file, output_file):
             print("Virtual halt missing.")
         writeFile(output_file, result)
         print(f"Assembly code converted to binary file {output_file}.")
+
+def main():
+   
+    if len(sys.argv) != 3:
+        
+        sys.exit(1)
+        
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
+    
+    Compiler(input_file, output_file)
+
+
+main()

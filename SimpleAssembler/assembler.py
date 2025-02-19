@@ -235,3 +235,20 @@ def machine_code(instuctions, labels, lineNo):
                 return f"Undefined Label {target} at line {lineNo}"
             Imi = labels[target] - ((lineNo - 1) * 4)
         return B_type(inst, rs1, rs2, Imi)
+    elif inst == 'jal':
+        if len(instruction_fields)!=3:
+            return f"Syntax Error at line {lineNo}"
+        rd = RegToNum(instruction_fields[1])
+        target = instruction_fields[2]
+        if rd==-1:
+            return f"Error: Invalid register name at line {lineNo}"
+            
+
+        if target.lstrip('-').isdigit():
+            Imi = int(target)
+        else:
+            if target not in labels:
+                return f"Error: Label not found at line {lineNo}"
+            Imi = labels[target] - ((lineNo - 1) * 4)
+        return J_type(inst, rd, Imi)
+    return f"Error: Invalid instruction or operand at line {lineNo}"

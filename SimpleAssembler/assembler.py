@@ -252,3 +252,20 @@ def machine_code(instuctions, labels, lineNo):
             Imi = labels[target] - ((lineNo - 1) * 4)
         return J_type(inst, rd, Imi)
     return f"Error: Invalid instruction or operand at line {lineNo}"
+
+def assemble_program(assembly_lines):
+    labels, instructions = code_parse(assembly_lines)
+    code = []
+    errors = []
+    for lineNo, instruction in enumerate(instructions, start=1):
+        result = machine_code(instruction, labels, lineNo)
+       
+        if not result.startswith('0') and not result.startswith('1'):
+            errors.append(result)
+        else:
+            code.append(result)
+
+    if "beq zero,zero,0" not in instructions:
+        errors.append("Virtual Halt Missing")
+        
+    return code, errors

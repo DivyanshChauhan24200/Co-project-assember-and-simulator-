@@ -269,3 +269,13 @@ def assemble_program(assembly_lines):
         errors.append("Virtual Halt Missing")
         
     return code, errors
+
+def readFile(filename):
+    with open(filename, 'r') as f:
+        data = f.readlines()
+    return data
+
+def writeFile(output, binary_lines):
+    with open(output, 'w') as f:
+        for line in binary_lines:
+            f.write(line + '\n')

@@ -55,8 +55,7 @@ def RegToNum(reg):
     else:
         return -1
 def R_type(inst, rd, rs1, rs2):
-    funct = 
-    {
+    funct = {
         "add": {"funct3": "000", "funct7": "0000000"},
         "sub": {"funct3": "000", "funct7": "0100000"},
         "slt": {"funct3": "010", "funct7": "0000000"},
@@ -72,8 +71,7 @@ def R_type(inst, rd, rs1, rs2):
             opcode[inst])
 
 def I_type(inst, rd, rs1, imidate):
-    funct3 = 
-    {
+    funct3 = {
         "lw": "010",
         "addi": "000",
         "jalr": "000"
@@ -82,4 +80,20 @@ def I_type(inst, rd, rs1, imidate):
             format(rs1, '05b') +
             funct3[inst] +
             format(rd, '05b') +
+            opcode[inst])
+def B_type(inst, rs1, rs2, imm):
+    funct3 = {
+        "beq": "000",
+        "bne": "001",
+        "blt": "100",
+    }
+    immd = imm >> 1  
+    b_imm = format(immd & 0xfff, '012b')
+    return (b_imm[0] +            
+            b_imm[2:8] +        
+            format(rs2, '05b') +  
+            format(rs1, '05b') +  
+            funct3[inst]+  
+            b_imm[8:12] +        
+            b_imm[1] +            
             opcode[inst])

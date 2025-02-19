@@ -13,4 +13,5 @@ opcode_map = {
     'or': 0b0110011, 'and': 0b0110011, 'lw': 0b0000011, 'addi': 0b0010011,
     'jalr': 0b1100111, 'sw': 0b0100011, 'beq': 0b1100011, 'bne': 0b1100011,
     'blt': 0b1100011, 'jal': 0b1101111, 'halt': None, 'rst': None
-}
+}def binary():
+    

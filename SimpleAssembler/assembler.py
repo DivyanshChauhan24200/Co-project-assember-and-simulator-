@@ -54,3 +54,18 @@ def RegToNum(reg):
         return registers[reg]
     else:
         return -1
+def R_type(inst, rd, rs1, rs2):
+    funct = {
+        "add": {"funct3": "000", "funct7": "0000000"},
+        "sub": {"funct3": "000", "funct7": "0100000"},
+        "slt": {"funct3": "010", "funct7": "0000000"},
+        "srl": {"funct3": "101", "funct7": "0000000"},
+        "or":  {"funct3": "110", "funct7": "0000000"},
+        "and": {"funct3": "111", "funct7": "0000000"}
+    }
+    return (funct[inst]["funct7"]+
+            format(rs2, '05b') +
+            format(rs1, '05b') +
+            funct[inst]["funct3"]+
+            format(rd, '05b') +
+            opcode[inst])

@@ -215,3 +215,23 @@ def machine_code(instuctions, labels, lineNo):
             return f"Error: Invalid memory operand at line {lineNo}"
     
         return S_type(inst, rs2, rs1, Imi)
+        
+    elif inst in ['beq', 'bne', 'blt']:
+        if len(instruction_fields)!=4:
+            return f"Syntax Error at line {lineNo}"
+        rs1 = RegToNum(instruction_fields[1])
+        rs2 = RegToNum(instruction_fields[2])
+        target = instruction_fields[3]
+        lis4=[rs1,rs2]
+        for i in lis4:
+            if i==-1:
+                return f"Error: Invalid register name at line {lineNo}"
+        
+
+        if target.lstrip('-').isdigit():
+            Imi = int(target)
+        else:
+            if target not in labels:
+                return f"Undefined Label {target} at line {lineNo}"
+            Imi = labels[target] - ((lineNo - 1) * 4)
+        return B_type(inst, rs1, rs2, Imi)

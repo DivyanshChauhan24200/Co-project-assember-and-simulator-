@@ -111,3 +111,22 @@ def S_type(inst, rs2, rs1, imm):
             "010"+
             b_imm[7:12] +
             opcode[inst])
+
+def code_parse(assembly_lines):
+    labels = {}
+    instructions = []
+    current_address = 0
+    for line in assembly_lines:
+        line = line.strip()
+        if not line:
+            continue
+        while ':' in line:
+            label_part, remainder = line.split(":", 1)
+            label = label_part.strip()
+            if label:
+                labels[label] = current_address
+            line = remainder.strip()
+        if line:
+            instructions.append(line)
+            current_address += 4
+    return labels, instructions

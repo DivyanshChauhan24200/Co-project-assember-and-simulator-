@@ -143,17 +143,14 @@ def machine_code(instuctions, labels, lineNo):
     if inst in ("add", "sub", "slt","srl", "or", "and"):
         if len(instruction_fields)!=4:
             return f"Syntax Error at line {lineNo}"
-
         rd = RegToNum(instruction_fields[1])
         rs1 = RegToNum(instruction_fields[2])
         rs2 = RegToNum(instruction_fields[3])
         lis1=[rd,rs1,rs2]
-
         for i in lis1:
             if i==-1:
                 return f"Error: Invalid register name at line {lineNo}"
         return R_type(inst, rd, rs1, rs2)
-        
     elif inst in ("addi", "lw", "jalr"):
         if inst == 'jalr':
             if len(instruction_fields)!=4:
@@ -213,9 +210,7 @@ def machine_code(instuctions, labels, lineNo):
                     return f"Error: Invalid register name at line {lineNo}"
         else:
             return f"Error: Invalid memory operand at line {lineNo}"
-    
         return S_type(inst, rs2, rs1, Imi)
-        
     elif inst in ['beq', 'bne', 'blt']:
         if len(instruction_fields)!=4:
             return f"Syntax Error at line {lineNo}"
@@ -226,8 +221,6 @@ def machine_code(instuctions, labels, lineNo):
         for i in lis4:
             if i==-1:
                 return f"Error: Invalid register name at line {lineNo}"
-        
-
         if target.lstrip('-').isdigit():
             Imi = int(target)
         else:
@@ -242,8 +235,6 @@ def machine_code(instuctions, labels, lineNo):
         target = instruction_fields[2]
         if rd==-1:
             return f"Error: Invalid register name at line {lineNo}"
-            
-
         if target.lstrip('-').isdigit():
             Imi = int(target)
         else:
@@ -259,23 +250,38 @@ def assemble_program(assembly_lines):
     errors = []
     for lineNo, instruction in enumerate(instructions, start=1):
         result = machine_code(instruction, labels, lineNo)
-       
         if not result.startswith('0') and not result.startswith('1'):
             errors.append(result)
         else:
             code.append(result)
-
     if "beq zero,zero,0" not in instructions:
         errors.append("Virtual Halt Missing")
-        
     return code, errors
 
 def readFile(filename):
     with open(filename, 'r') as f:
         data = f.readlines()
     return data
-
+    
 def writeFile(output, binary_lines):
     with open(output, 'w') as f:
         for line in binary_lines:
             f.write(line + '\n')
+
+def Compiler(input_file, output_file):
+    asm_code = readFile(input_file)
+    result, errors = assemble_program(asm_code)
+    non_halt_errors = [err for err in errors if err != "Virtual Halt Missing"]
+    if non_halt_errors:
+        with open("stdout.txt", 'w') as f:
+            for err in errors:
+                f.write(err + "\n")
+        print("Errors encountered. Check stdout.txt for error details.")
+    else:
+        if errors:
+            with open("stdout.txt", 'w') as f:
+                for err in errors:
+                    f.write(err + "\n")
+            print("Virtual halt missing.")
+        writeFile(output_file, result)
+        print(f"Assembly code converted to binary file {output_file}.")

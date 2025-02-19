@@ -49,3 +49,8 @@ opcode = {
     "jal": "1101111",
 
 }
+def RegToNum(reg):
+    if reg in registers.keys():
+        return registers[reg]
+    else:
+        return -1

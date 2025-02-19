@@ -97,3 +97,9 @@ def B_type(inst, rs1, rs2, imm):
             b_imm[8:12] +        
             b_imm[1] +            
             opcode[inst])
+def J_type(inst, rd, imm):
+    j_imm = format(imm & 0x1fffff, '021b')
+    imm_20 = j_imm[0] + j_imm[10:20] + j_imm[9] + j_imm[1:9]
+    return (imm_20 +
+            format(rd, '05b') +
+            opcode[inst])

@@ -6,4 +6,4 @@ Group 36:
     3. Aakarshan 2024005
     4. Sanjit Singh 2024505
 This Project deals with some basic instructions which RISC V ISA is supoorting, we deal with some part of instruction of ISA.
-We deal with instcution of R-type , I-type, S-type, B-type, J-type. For implement these type of instruction, we design an assembler which takes these input in form of assembly language
+We deal with instcution of R-type , I-type, S-type, B-type, J-type. For implement these type of instruction, we design an assembler which takes these input in form of assembly language and convert into machine language(binary language) based on the format defined for each instructions in RISC V ISA.

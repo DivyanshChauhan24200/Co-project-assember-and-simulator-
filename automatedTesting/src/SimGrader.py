@@ -8,9 +8,9 @@ import os
 class SimGrader(Grader):
 
 	# 0.2 x 10
-	SIMPLE_MARKS = 4/6 #0.2
+	SIMPLE_MARKS = 2    #4/6 #0.2
 	# 0.8 x 5
-	HARD_MARKS = 0.8
+	HARD_MARKS = 1
 
 	BIN_HARD_DIR = "hard"
 	BIN_SIMPLE_DIR = "simple"
@@ -48,10 +48,16 @@ class SimGrader(Grader):
 			if self.operating_system == 'linux':
 				machine_code_file = ' ' + '../automatedTesting/tests/bin/' + genDir + '/' + test
 				output_trace_file = ' ' + '../automatedTesting/tests/user_traces/' + genDir + '/' + test
+				output_read_trace_file = ' ' + '../automatedTesting/tests/user_traces/' + genDir + '/' + test.split(".")[0]+"_r.txt"
+				os.remove(output_trace_file) if os.path.exists(output_trace_file) else None; 
+				os.remove(output_read_trace_file) if os.path.exists(output_read_trace_file) else None;
 			elif self.operating_system == 'windows':
 				machine_code_file = ' ' + '..\\automatedTesting\\tests\\bin\\' + genDir + '\\' + test
 				output_trace_file = ' ' + '..\\automatedTesting\\tests\\user_traces\\' + genDir + '\\' + test
-			command = python_command + machine_code_file + output_trace_file
+				output_read_trace_file = ' ' + '../automatedTesting/tests/user_traces/' + genDir + '/' + test.split(".")[0]+"_r.txt"
+				os.remove(output_trace_file) if os.path.exists(output_trace_file) else None; 
+				os.remove(output_read_trace_file) if os.path.exists(output_read_trace_file) else None;
+			command = python_command + machine_code_file + output_trace_file + output_read_trace_file
 			os.system(command)
 			
 			
@@ -61,7 +67,13 @@ class SimGrader(Grader):
 				exact_trace_file = "../automatedTesting/tests/traces/" + expDir + "/" + test
 			elif self.operating_system == 'windows':
 				exact_trace_file = "..\\automatedTesting\\tests\\traces\\" + expDir + "\\" + test
-			expectedTrace = open(exact_trace_file,'r').readlines()
+				
+			try:
+				expectedTrace = open(exact_trace_file,'r').readlines()
+			except FileNotFoundError:
+				self.printSev(self.HIGH, bcolors.WARNING + "[Golden Binary Trace File Not Found]\n" + exact_trace_file)
+				expectedTrace = " "
+			
 
 			if self.diff(generatedTrace, expectedTrace):
 				self.printSev(self.HIGH, bcolors.OKGREEN + "[PASSED]" + bcolors.ENDC + " " + test)

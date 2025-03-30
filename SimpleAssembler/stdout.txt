@@ -1,0 +1,8 @@
+Error: Invalid instruction sltiu at line 1
+Error: Invalid instruction sltiu at line 2
+Error: Invalid instruction bgeu at line 8
+Error: Invalid instruction lui at line 9
+Error: Invalid instruction auipc at line 10
+Error: Invalid instruction xor at line 11
+Error: Invalid instruction sll at line 12
+Error: Invalid instruction sltiu at line 13

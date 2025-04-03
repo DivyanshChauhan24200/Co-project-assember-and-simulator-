@@ -139,3 +139,33 @@ class Simulator:
                 result=self.AND(r1,r2)
         self.write_register(rd, result)
         return self.pc+4
+    def type_I_addi(self,current_inst):
+        imm_field = current_inst[0:12]
+        imm = int(imm_field, 2)
+        imm = self.sign_extend(imm, 12)
+        rs1 = int(current_inst[12:17], 2)
+        funct3 = current_inst[17:20]
+        rd = int(current_inst[20:25], 2)
+        if funct3 == "000":
+             result = self.registers[rs1] + imm
+        else:
+            print(f"invalid I-type funct3: {funct3}")
+            sys.exit(1)
+        self.write_register(rd, result)
+        return self.pc+4
+    def type_I_lw(self,current_inst):
+        imm = int(current_inst[0:12], 2)
+        imm = self.sign_extend(imm, 12)
+        rs1 = int(current_inst[12:17], 2)
+        funct3 = current_inst[17:20]
+        rd = int(current_inst[20:25], 2)
+        if funct3 == "010":
+            addr = self.registers[rs1] + imm
+           
+            value = self.read_memory(addr)
+            self.write_register(rd, value)
+        else:
+            print(f"invalid lw funct3: {funct3}")
+            sys.exit(1)
+        
+        return self.pc+4

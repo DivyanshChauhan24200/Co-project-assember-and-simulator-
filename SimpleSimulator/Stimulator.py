@@ -273,7 +273,7 @@ class Simulator:
         
 
         return self.binary_trace, self.decimal_trace, self.data_memory
-        def main():
+def main():
     args = sys.argv[1:] 
 
     if len(args) < 2:

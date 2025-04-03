@@ -169,3 +169,36 @@ class Simulator:
             sys.exit(1)
         
         return self.pc+4
+    def type_I_jalr(self,current_inst):
+        imm = int(current_inst[0:12], 2)
+        imm = self.sign_extend(imm, 12)
+        rs1 = int(current_inst[12:17], 2)
+        rd = int(current_inst[20:25], 2)
+        target = (self.registers[rs1] + imm) & 0xFFFFFFFE
+        self.write_register(rd, self.pc + 4)
+        new_pc = target
+        return new_pc
+    def type_B(self,current_inst):
+        imm_12 = current_inst[0]
+        imm_10_5 = current_inst[1:7]
+        imm_4_1 = current_inst[20:24]
+        imm_11 = current_inst[24]
+        imm = int(imm_12 + imm_11 + imm_10_5 + imm_4_1, 2)
+        imm = self.sign_extend(imm, 12) << 1
+        rs1 = int(current_inst[12:17], 2)
+        rs2 = int(current_inst[7:12], 2)
+        funct3 = current_inst[17:20]
+        bt = False
+        if funct3 == "000":
+            if (self.registers[rs1] == self.registers[rs2]):
+                bt=True
+        elif funct3 == "001":
+            if (self.registers[rs1] != self.registers[rs2]):
+                bt=True
+        else:
+            print(f"Unsupported B-type funct3: {funct3}")
+            sys.exit(1)
+        if bt:
+            return self.pc+imm
+        else:
+            return self.pc+4

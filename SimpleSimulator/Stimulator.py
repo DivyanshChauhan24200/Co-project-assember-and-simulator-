@@ -53,3 +53,28 @@ class Simulator:
                 instructions.append(line)
 
         return instructions
+    @staticmethod
+    def sign_extend(value, bits):
+        threshold = 1 << (bits - 1)
+        if value >= threshold:
+            return value - (1 << bits)
+        else:
+            return value
+
+
+    def write_register(self, rd, value):
+        
+        if rd >0:
+            self.registers[rd] = value & 0xFFFFFFFF
+    def trace_binary(self, pc, registers):
+        
+        pc_str = "0b" + bin(pc & 0xFFFFFFFF)[2:].zfill(32)
+
+        
+        regs_str = []
+        for r in registers:
+            bin_value = bin(r & 0xFFFFFFFF)[2:].zfill(32)
+            regs_str.append("0b" + bin_value)
+
+        
+        return pc_str + " " + " ".join(regs_str)

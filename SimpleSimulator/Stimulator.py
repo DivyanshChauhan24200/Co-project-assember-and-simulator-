@@ -214,3 +214,19 @@ class Simulator:
         self.write_register(rd, self.pc + 4)
         new_pc = self.pc + imm
         return new_pc
+    def type_S(self,current_inst):
+        imm_high = current_inst[0:7]
+        imm_low = current_inst[20:25]
+        imm = int(imm_high + imm_low, 2)
+        imm = self.sign_extend(imm, 12)
+        rs1 = int(current_inst[12:17], 2)
+        rs2 = int(current_inst[7:12], 2)
+        funct3 = current_inst[17:20]
+        if funct3 == "010":
+            addr = self.registers[rs1] + imm
+            # Use write_memory method
+            self.write_memory(addr, self.registers[rs2])
+        else:
+            print(f"Unsupported sw funct3: {funct3}")
+            sys.exit(1)
+        return self.pc+4

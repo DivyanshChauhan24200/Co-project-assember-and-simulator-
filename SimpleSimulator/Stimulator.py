@@ -202,3 +202,15 @@ class Simulator:
             return self.pc+imm
         else:
             return self.pc+4
+
+    def type_J(self,current_inst):
+        imm_20 = current_inst[0]
+        imm_10_1 = current_inst[1:11]
+        imm_11 = current_inst[11]
+        imm_19_12 = current_inst[12:20]
+        imm = int(imm_20 + imm_19_12 + imm_11 + imm_10_1, 2)
+        imm = self.sign_extend(imm, 20) << 1
+        rd = int(current_inst[20:25], 2)
+        self.write_register(rd, self.pc + 4)
+        new_pc = self.pc + imm
+        return new_pc

@@ -20,3 +20,36 @@ class Simulator:
         }
 
         self.decimal_trace = []
+    def write_memory(self, addr, value):
+        
+        if addr >= 65536 and addr < 65664:  
+            mem_index = (addr - 65536) // 4
+            if 0 <= mem_index < 32:  
+                self.data_memory[mem_index] = value
+        else:
+            
+            self.stack_memory[addr] = value
+
+    def read_memory(self, addr):
+        
+        if addr >= 65536 and addr < 65664: 
+            mem_index = (addr - 65536) // 4
+            if 0 <= mem_index < 32:  
+                return self.data_memory[mem_index]
+            return 0
+        else:
+            
+            return self.stack_memory.get(addr, 0)
+    def load_instructions(self, input_file):
+        instructions = []
+        
+        with open(input_file, 'r') as f:
+            for line_num, line in enumerate(f, 1):
+                line = line.strip()
+                if len(line) != 32:
+                    print(f"Invalid encoding at {line_num}")
+                    sys.exit(1)
+                
+                instructions.append(line)
+
+        return instructions

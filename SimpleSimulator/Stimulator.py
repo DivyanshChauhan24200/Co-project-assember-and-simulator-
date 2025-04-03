@@ -78,3 +78,24 @@ class Simulator:
 
         
         return pc_str + " " + " ".join(regs_str)
+            def ADD(self,r1,r2):
+        result=r1+r2
+        return result
+    def SUB(self,r1,r2):
+        result=r1-r2
+        return result
+    def OR(self,r1,r2):
+        result=r1|r2
+        return result
+    def AND(self,r1,r2):
+        result=r1&r2
+        return result
+    def SRL(self,r1,r2):
+        shift = r2& 0x1F 
+        result = r1>> shift
+        return result
+    def SLT(self,r1,r2):
+        if r1<r2:
+            return 1
+        else:
+            return 0

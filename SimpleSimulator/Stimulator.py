@@ -99,3 +99,43 @@ class Simulator:
             return 1
         else:
             return 0
+    def trace_decimal(self, pc, registers):
+        values = [str(pc)] + [str(r) for r in registers]
+        return " ".join(values)
+    def type_R(self,current_inst):
+        funct7 = current_inst[0:7]
+        rs2 = int(current_inst[7:12], 2)
+        rs1 = int(current_inst[12:17], 2)
+        funct3 = current_inst[17:20]
+        rd = int(current_inst[20:25], 2)
+        r1 = self.registers[rs1]
+        r2 = self.registers[rs2]
+        functs=[funct3,funct7]
+        
+        funct_map = {
+            "ADD": ["000", "0000000"],  
+            "SUB": ["000", "0100000"],  
+            "OR": ["110", "0000000"],  
+            "AND": ["111", "0000000"],  
+            "SRL": ["101", "0000000"],  
+            "SLT": ["010", "0000000"],  
+        }
+
+        if functs not in funct_map.values():
+            print(f"Invalid R type instruction funct3={functs[0]} , funct7={functs[1]}")
+        else:
+            
+            if funct_map["ADD"]==functs:
+                result=self.ADD(r1,r2)
+            elif funct_map["SUB"]==functs:
+                result=self.SUB(r1,r2)
+            elif funct_map["OR"]==functs:
+                result=self.OR(r1,r2)
+            elif funct_map["SRL"]==functs:
+                result=self.SRL(r1,r2)
+            elif funct_map["SLT"]==functs:
+                result=self.SLT(r1,r2)
+            elif funct_map["AND"]==functs:
+                result=self.AND(r1,r2)
+        self.write_register(rd, result)
+        return self.pc+4

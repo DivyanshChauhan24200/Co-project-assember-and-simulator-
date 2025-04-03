@@ -78,7 +78,7 @@ class Simulator:
 
         
         return pc_str + " " + " ".join(regs_str)
-            def ADD(self,r1,r2):
+    def ADD(self,r1,r2):
         result=r1+r2
         return result
     def SUB(self,r1,r2):

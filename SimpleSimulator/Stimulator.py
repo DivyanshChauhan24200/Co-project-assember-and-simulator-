@@ -273,3 +273,42 @@ class Simulator:
         
 
         return self.binary_trace, self.decimal_trace, self.data_memory
+        def main():
+    args = sys.argv[1:] 
+
+    if len(args) < 2:
+        sys.exit(1)
+
+    input_file = args[0]
+    output_base = args[1]
+
+ 
+    if "." in output_base:
+        file1 = output_base
+        file2 = output_base.rsplit(".", 1)[0] + "_r." + output_base.rsplit(".", 1)[1]
+    else:
+        file1 = output_base + ".txt"
+        file2 = output_base + "_r.txt"
+
+
+    simulator = Simulator(input_file)
+    bin_trace, dec_trace, data_mem = simulator.run()
+
+ 
+    with open(file1, 'w') as f:
+        for line in bin_trace:
+            f.write(line + "\n")
+        for i in range(len(data_mem)):
+            addr = 0x00010000 + i * 4
+            f.write(f"0x{addr:08X}:0b{data_mem[i]:032b}\n")
+
+
+    with open(file2, 'w') as f:
+        for line in dec_trace:
+            f.write(line + "\n")
+        for i in range(len(data_mem)):
+            addr = 0x00010000 + i * 4
+            f.write(f"0x{addr:08X}:{data_mem[i]}\n")
+
+
+main()

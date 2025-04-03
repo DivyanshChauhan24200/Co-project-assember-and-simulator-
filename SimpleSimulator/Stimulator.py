@@ -230,3 +230,46 @@ class Simulator:
             print(f"Unsupported sw funct3: {funct3}")
             sys.exit(1)
         return self.pc+4
+    def run(self):
+        while True:
+            inst_index = self.pc // 4
+            if inst_index < 0 or inst_index >= len(self.instructions):
+                break
+
+            current_inst = self.instructions[inst_index]
+            
+            if current_inst == "00000000000000000000000001100011":
+                self.binary_trace.append(self.trace_binary(self.pc, self.registers))
+                self.decimal_trace.append(self.trace_decimal(self.pc, self.registers))
+                break
+            if current_inst == "11111111111111111111111111111111":
+                break
+
+            new_pc = self.pc + 4
+            opcode = current_inst[25:32]
+            if opcode not in self.opcode_map.values():
+                print(f"Invalid Opcode {opcode}")
+                sys.exit(1)
+            else:
+                if self.opcode_map["R"]==opcode:
+                    new_pc=self.type_R(current_inst)
+                elif self.opcode_map["S"]==opcode:
+                    new_pc=self.type_S(current_inst)
+                elif self.opcode_map["lw"]==opcode:
+                    new_pc=self.type_I_lw(current_inst)
+                elif self.opcode_map["jalr"]==opcode:
+                    new_pc=self.type_I_jalr(current_inst)
+                elif self.opcode_map["addi"]==opcode:
+                    new_pc=self.type_I_addi(current_inst)
+                elif self.opcode_map["B"]==opcode:
+                    new_pc=self.type_B(current_inst)
+                elif self.opcode_map["J"]==opcode:
+                    new_pc=self.type_J(current_inst)
+                    
+
+            self.pc = new_pc
+            self.binary_trace.append(self.trace_binary(self.pc, self.registers))
+            self.decimal_trace.append(self.trace_decimal(self.pc, self.registers))
+        
+
+        return self.binary_trace, self.decimal_trace, self.data_memory
